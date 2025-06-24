@@ -1,0 +1,6 @@
+CREATE TABLE tracking_event(
+    session_id String,
+    user_id String
+)
+ENGINE = MergeTree
+ORDER BY session_id;

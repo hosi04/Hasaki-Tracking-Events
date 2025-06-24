@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty Store - Sản phẩm làm đẹp</title>
+    <link rel="stylesheet" href="./assets/style.css"> <!-- Nhúng style.css -->
+    <script src="./javascript/tracking.js"></script>
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="showPage('home')">💄 Beauty Store</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm...">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="cart-icon" onclick="showPage('cart')">
+                    🛒
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <ul class="nav-links">
+                <li><a onclick="showPage('home')">Trang chủ</a></li>
+                <li><a href="#skincare">Chăm sóc da</a></li>
+                <li><a href="#makeup">Trang điểm</a></li>
+                <li><a href="#haircare">Chăm sóc tóc</a></li>
+                <li><a href="#bodycare">Chăm sóc cơ thể</a></li>
+                <li><a href="#brands">Thương hiệu</a></li>
+                <li><a href="#sale">Khuyến mãi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="container">
+            <h1 class="page-title">Sản phẩm nổi bật</h1>
+            
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card" onclick="openProductDetail('La Roche-Posay Serum Vitamin C', 'La Roche-Posay', '890.000', '1.200.000', '26', '🧴')">
+                    <div class="product-image">🧴</div>
+                    <div class="product-info">
+                        <h3 class="product-name">La Roche-Posay Serum Vitamin C</h3>
+                        <p class="product-brand">La Roche-Posay</p>
+                        <div class="product-price">
+                            <span class="current-price">890.000₫</span>
+                            <span class="original-price">1.200.000₫</span>
+                            <span class="discount">-26%</span>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(event, 'La Roche-Posay Serum Vitamin C', 'La Roche-Posay', 890000, '🧴')">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card" onclick="openProductDetail('Cetaphil Sữa Rửa Mặt Dịu Nhẹ', 'Cetaphil', '245.000', '320.000', '23', '🧼')">
+                    <div class="product-image">🧼</div>
+                    <div class="product-info">
+                        <h3 class="product-name">Cetaphil Sữa Rửa Mặt Dịu Nhẹ</h3>
+                        <p class="product-brand">Cetaphil</p>
+                        <div class="product-price">
+                            <span class="current-price">245.000₫</span>
+                            <span class="original-price">320.000₫</span>
+                            <span class="discount">-23%</span>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(event, 'Cetaphil Sữa Rửa Mặt Dịu Nhẹ', 'Cetaphil', 245000, '🧼')">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card" onclick="openProductDetail('Maybelline Mascara Lash Sensational', 'Maybelline', '199.000', '280.000', '29', '💄')">
+                    <div class="product-image">💄</div>
+                    <div class="product-info">
+                        <h3 class="product-name">Maybelline Mascara Lash Sensational</h3>
+                        <p class="product-brand">Maybelline</p>
+                        <div class="product-price">
+                            <span class="current-price">199.000₫</span>
+                            <span class="original-price">280.000₫</span>
+                            <span class="discount">-29%</span>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(event, 'Maybelline Mascara Lash Sensational', 'Maybelline', 199000, '💄')">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card" onclick="openProductDetail('Innisfree Green Tea Seed Serum', 'Innisfree', '420.000', '550.000', '24', '🌿')">
+                    <div class="product-image">🌿</div>
+                    <div class="product-info">
+                        <h3 class="product-name">Innisfree Green Tea Seed Serum</h3>
+                        <p class="product-brand">Innisfree</p>
+                        <div class="product-price">
+                            <span class="current-price">420.000₫</span>
+                            <span class="original-price">550.000₫</span>
+                            <span class="discount">-24%</span>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(event, 'Innisfree Green Tea Seed Serum', 'Innisfree', 420000, '🌿')">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card" onclick="openProductDetail('The Ordinary Niacinamide 10%', 'The Ordinary', '180.000', '230.000', '22', '💧')">
+                    <div class="product-image">💧</div>
+                    <div class="product-info">
+                        <h3 class="product-name">The Ordinary Niacinamide 10%</h3>
+                        <p class="product-brand">The Ordinary</p>
+                        <div class="product-price">
+                            <span class="current-price">180.000₫</span>
+                            <span class="original-price">230.000₫</span>
+                            <span class="discount">-22%</span>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(event, 'The Ordinary Niacinamide 10%', 'The Ordinary', 180000, '💧')">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card" onclick="openProductDetail('L\'Oreal Paris Revitalift Kem Dưỡng', 'L\'Oreal Paris', '320.000', '420.000', '24', '🏺')">
+                    <div class="product-image">🏺</div>
+                    <div class="product-info">
+                        <h3 class="product-name">L'Oreal Paris Revitalift Kem Dưỡng</h3>
+                        <p class="product-brand">L'Oreal Paris</p>
+                        <div class="product-price">
+                            <span class="current-price">320.000₫</span>
+                            <span class="original-price">420.000₫</span>
+                            <span class="discount">-24%</span>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(event, 'L\'Oreal Paris Revitalift Kem Dưỡng', 'L\'Oreal Paris', 320000, '🏺')">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Page -->
+    <div id="cart" class="page">
+        <div class="container">
+            <h1 class="page-title">Giỏ hàng của bạn</h1>
+            
+            <div class="cart-container">
+                <div id="cart-items">
+                    <!-- Cart items will be dynamically inserted here -->
+                </div>
+                
+                <div id="cart-empty" class="cart-empty">
+                    <div class="cart-empty-icon">🛒</div>
+                    <h3>Giỏ hàng trống</h3>
+                    <p>Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm</p>
+                </div>
+                
+                <div id="cart-summary" class="cart-summary" style="display: none;">
+                    <div class="summary-row">
+                        <span>Tạm tính:</span>
+                        <span id="subtotal">0₫</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Phí vận chuyển:</span>
+                        <span id="shipping">30.000₫</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Tổng cộng:</span>
+                        <span id="total">0₫</span>
+                    </div>
+                    
+                    <div class="checkout-section">
+                        <button class="continue-shopping" onclick="showPage('home')">Tiếp tục mua sắm</button>
+                        <button class="checkout-btn" onclick="checkout()">Thanh toán</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Chi tiết sản phẩm</h2>
+                <button class="close-btn" onclick="closeProductDetail()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="product-detail-image" id="modalImage">🧴</div>
+                <div class="product-detail-info">
+                    <h2 class="detail-name" id="modalName">Tên sản phẩm</h2>
+                    <p class="detail-brand" id="modalBrand">Thương hiệu</p>
+                    <div class="detail-price">
+                        <span class="detail-current-price" id="modalCurrentPrice">0₫</span>
+                        <span class="detail-original-price" id="modalOriginalPrice">0₫</span>
+                    </div>
+                    
+                    <div class="quantity-selector">
+                        <span>Số lượng:</span>
+                        <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                        <input type="number" class="quantity-input" id="quantity" value="1" min="1">
+                        <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                    </div>
+                    
+                    <button class="detail-add-to-cart" onclick="addToCartFromModal()">Thêm vào giỏ hàng</button>
+                    
+                    <div class="product-description">
+                        <h3 class="description-title">Mô tả sản phẩm</h3>
+                        <p id="modalDescription">Sản phẩm chất lượng cao, được nhiều khách hàng tin dùng. Phù hợp cho mọi loại da, không gây kích ứng. Được sản xuất theo tiêu chuẩn quốc tế, đảm bảo an toàn cho người sử dụng.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let currentProduct = {};
+        
+        // Show different pages
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            if (pageId === 'cart') {
+                renderCart();
+            }
+        }
+        
+        // Add to cart function
+        function addToCart(event, name, brand, price, emoji) {
+            event.stopPropagation();
+            
+            const existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: name,
+                    brand: brand,
+                    price: price,
+                    emoji: emoji,
+                    quantity: 1
+                });
+            }
+            trackAddToCart(name, brand, price, emoji);
+            
+            updateCartCount();
+            showNotification(`Đã thêm "${name}" vào giỏ hàng!`);
+        }
+        
+        // Update cart count
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.cart-count').textContent = totalItems;
+        }
+        
+        // Render cart items
+        function renderCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartEmpty = document.getElementById('cart-empty');
+            const cartSummary = document.getElementById('cart-summary');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '';
+                cartEmpty.style.display = 'block';
+                cartSummary.style.display = 'none';
+                return;
+            }
+            
+            cartEmpty.style.display = 'none';
+            cartSummary.style.display = 'block';
+            
+            let cartHTML = '';
+            cart.forEach((item, index) => {
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-image">${item.emoji}</div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-brand">${item.brand}</div>
+                            <div class="cart-item-price">${formatPrice(item.price)}₫</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="quantity-controls">
+                                <button class="qty-btn" onclick="changeQuantity(${index}, -1)">-</button>
+                                <input type="number" class="qty-input" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)">
+                                <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
+                            </div>
+                            <button class="remove-item" onclick="removeFromCart(${index})">Xóa</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItemsContainer.innerHTML = cartHTML;
+            updateCartSummary();
+        }
+        
+        // Change quantity
+        function changeQuantity(index, change) {
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartCount();
+            renderCart();
+        }
+        
+        // Update quantity directly
+        function updateQuantity(index, newQuantity) {
+            const qty = parseInt(newQuantity);
+            if (qty > 0) {
+                cart[index].quantity = qty;
+            } else {
+                cart.splice(index, 1);
+            }
+            updateCartCount();
+            renderCart();
+        }
+        
+        // Remove item from cart
+        function removeFromCart(index) {
+            const itemName = cart[index].name;
+            cart.splice(index, 1);
+            updateCartCount();
+            renderCart();
+            showNotification(`Đã xóa "${itemName}" khỏi giỏ hàng!`);
+        }
+        
+        // Update cart summary
+        function updateCartSummary() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 0 ? 30000 : 0;
+            const total = subtotal + shipping;
+            
+            document.getElementById('subtotal').textContent = formatPrice(subtotal) + '₫';
+            document.getElementById('shipping').textContent = formatPrice(shipping) + '₫';
+            document.getElementById('total').textContent = formatPrice(total) + '₫';
+        }
+        
+        // Format price
+        function formatPrice(price) {
+            return price.toLocaleString('vi-VN');
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 2000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            // Add CSS animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Checkout function
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Giỏ hàng trống!');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 30000;
+            showNotification(`Đặt hàng thành công! Tổng tiền: ${formatPrice(total)}₫`);
+            
+            // Clear cart after successful checkout
+            cart = [];
+            updateCartCount();
+            renderCart();
+        }
+        
+        // Product detail modal functions
+        function openProductDetail(name, brand, currentPrice, originalPrice, discount, emoji) {
+            currentProduct = {
+                name: name,
+                brand: brand,
+                price: parseInt(currentPrice.replace('.', '')),
+                emoji: emoji
+            };
+            
+            document.getElementById('modalName').textContent = name;
+            document.getElementById('modalBrand').textContent = brand;
+            document.getElementById('modalCurrentPrice').textContent = currentPrice + '₫';
+            document.getElementById('modalOriginalPrice').textContent = originalPrice + '₫';
+            document.getElementById('modalImage').textContent = emoji;
+            document.getElementById('quantity').value = 1;
+            document.getElementById('productModal').style.display = 'block';
+        }
+        
+        function closeProductDetail() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+        
+        function increaseQuantity() {
+            const input = document.getElementById('quantity');
+            input.value = parseInt(input.value) + 1;
+        }
+        
+        function decreaseQuantity() {
+            const input = document.getElementById('quantity');
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+        
+        function addToCartFromModal() {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            
+            const existingItem = cart.find(item => item.name === currentProduct.name);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    name: currentProduct.name,
+                    brand: currentProduct.brand,
+                    price: currentProduct.price,
+                    emoji: currentProduct.emoji,
+                    quantity: quantity
+                });
+            }
+            
+            updateCartCount();
+            closeProductDetail();
+            trackAddToCart(currentProduct.name, currentProduct.brand, currentProduct.price, currentProduct.emoji, quantity);
+            showNotification(`Đã thêm ${quantity} sản phẩm "${currentProduct.name}" vào giỏ hàng!`);
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('productModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProductDetail();
+            }
+        });
+        
+        // Search functionality
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-bar input').value;
+            if (searchTerm) {
+                showNotification(`Đang tìm kiếm: "${searchTerm}"`);
+            }
+        });
+        
+        document.querySelector('.search-bar input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value;
+                if (searchTerm) {
+                    showNotification(`Đang tìm kiếm: "${searchTerm}"`);
+                }
+            }
+        });
+        
+        // Initialize cart count on page load
+        updateCartCount();
+    </script>
+</body>
+</html>
