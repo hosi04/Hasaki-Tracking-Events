@@ -1,7 +1,8 @@
-from pyspark.sql.functions import from_json, col, to_json, to_utc_timestamp, from_unixtime, to_timestamp, explode
-from pyspark.sql.types import StructType, StructField, StringType, LongType, ArrayType, TimestampType, MapType
-from config.spark_config import SparkConnect, get_spark_config
-from src.spark.spark_write_database import SparkWriteDatabase
+from pyspark.sql.functions import from_json, col, to_json, from_unixtime, explode
+from pyspark.sql.types import StructType, StructField, StringType, LongType, ArrayType, MapType
+
+from config.spark_config import SparkConnect
+
 
 def write_to_clickhouse_tables(batch_df, batch_id):
     if batch_df.isEmpty():

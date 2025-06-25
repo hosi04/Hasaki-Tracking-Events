@@ -32,16 +32,4 @@ async def track_event(request: Request):
         print("Kafka error:", str(e))
         return {"error": "Failed to send event to Kafka"}
 
-# # Endpoint nhận POST /track
-# @app.post("/track")
-# async def track_event(request: Request):
-#     event_data = await request.json()
-#     print("Received event:", json.dumps(event_data, indent=2, ensure_ascii=False))
-    
-#     # Lưu tạm vào file để kiểm tra (hoặc gửi tới Kafka sau này)
-#     with open("events.json", "a") as f:
-#         f.write(json.dumps(event_data) + "\n")
-    
-#     return {"message": "Event tracked successfully"}
-
     

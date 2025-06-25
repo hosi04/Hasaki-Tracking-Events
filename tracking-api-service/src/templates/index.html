@@ -4,14 +4,56 @@
   <meta charset="UTF-8">
   <title>Real-time Dashboard</title>
   <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <!-- Thêm Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <h2>Top sản phẩm được checkout</h2>
   <ul id="product-list"></ul>
 
+  <!-- Thêm canvas cho biểu đồ -->
+  <h2>Biểu đồ số lần checkout theo sản phẩm</h2>
+  <canvas id="checkoutChart" width="400" height="200"></canvas>
+
   <script>
     const socket = io();
+
+    // Khởi tạo biểu đồ với Chart.js
+    const ctx = document.getElementById('checkoutChart').getContext('2d');
+    const checkoutChart = new Chart(ctx, {
+      type: 'bar', // Loại biểu đồ: bar (cột), pie (tròn), line (đường), v.v.
+      data: {
+        labels: [], // Tên sản phẩm
+        datasets: [{
+          label: 'Số lần checkout',
+          data: [], // Tổng số lần checkout
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Số lần checkout'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Sản phẩm'
+            }
+          }
+        }
+      }
+    });
+
+    // Lắng nghe sự kiện update_data
     socket.on('update_data', function(message) {
+      // Cập nhật danh sách
       const list = document.getElementById('product-list');
       list.innerHTML = '';
       message.data.forEach(([product_name, total]) => {
@@ -19,9 +61,12 @@
         li.textContent = `${product_name}: ${total} lần`;
         list.appendChild(li);
       });
+
+      // Cập nhật dữ liệu cho biểu đồ
+      checkoutChart.data.labels = message.data.map(([product_name]) => product_name);
+      checkoutChart.data.datasets[0].data = message.data.map(([, total]) => total);
+      checkoutChart.update(); // Cập nhật biểu đồ
     });
   </script>
 </body>
 </html>
-
-http://localhost:5000

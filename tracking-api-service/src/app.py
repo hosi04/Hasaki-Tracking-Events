@@ -8,14 +8,16 @@ app = Flask(__name__)
 socketio = SocketIO(app, async_mode='threading')  # Thêm async_mode để tránh xung đột
 
 # Kết nối ClickHouse
-client = clickhouse_connect.get_client(host='localhost', port=8123)
+client = clickhouse_connect.get_client(host='localhost', port=8123, user='default', password='', database='tracking_problem')
 
 def poll_clickhouse():
     while True:
         try:
             # Truy vấn: thống kê số lần checkout theo sản phẩm
             result = client.query("""
-                SELECT product_name, count(*) AS total
+                SELECT
+                    product_name,
+                    sum(toUInt32(quantity)) AS total
                 FROM tracking_problem.checkout_items
                 GROUP BY product_name
                 ORDER BY total DESC
