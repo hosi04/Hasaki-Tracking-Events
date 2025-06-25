@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real-time Dashboard</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+  <h2>Top sản phẩm được checkout</h2>
+  <ul id="product-list"></ul>
+
+  <script>
+    const socket = io();
+    socket.on('update_data', function(message) {
+      const list = document.getElementById('product-list');
+      list.innerHTML = '';
+      message.data.forEach(([product_name, total]) => {
+        const li = document.createElement('li');
+        li.textContent = `${product_name}: ${total} lần`;
+        list.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>
+
+http://localhost:5000
