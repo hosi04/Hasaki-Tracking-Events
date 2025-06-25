@@ -26,15 +26,6 @@ class BeautyStoreAnalytics {
 
     // Initialize tracking
     init() {
-        // this.trackPageLoad();
-        // this.setupEventListeners();
-        // this.trackUserAgent();
-        // this.trackScreenResolution();
-
-        // Send data before page unload
-        // window.addEventListener('beforeunload', () => {
-        //     this.sendTrackingData();
-        // });
     }
 
     // Track page load
@@ -136,7 +127,7 @@ class BeautyStoreAnalytics {
     
     this.addEvent(event);
     console.log('🛒 Add to Cart Tracked:', event);
-    // Không gọi sendTrackingData ở đây
+    // Gọi sendTrackingData ở đây
     this.sendTrackingData()
 }
 
@@ -178,6 +169,8 @@ class BeautyStoreAnalytics {
         
         this.addEvent(event);
         console.log('💳 Checkout Tracked:', event);
+        // Gọi sendTrackingData ở đây
+        this.sendTrackingData()
     }
 
     // Setup event listeners

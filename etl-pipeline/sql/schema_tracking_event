@@ -1,6 +1,76 @@
-CREATE TABLE tracking_event(
-    session_id String,
-    user_id String
+CREATE TABLE tracking_event (
+    session_id Nullable(String),
+    session_start_time Nullable(DateTime),
+    timestamp DateTime,
+    user_id Nullable(String),
+    event_type Nullable(String),
+    product_name Nullable(String),
+    product_brand Nullable(String),
+    price Nullable(String),
+    quantity Nullable(Int32),
+    total_value Nullable(String)
 )
 ENGINE = MergeTree
-ORDER BY session_id;
+ORDER BY timestamp
+
+V02
+CREATE TABLE tracking_event_v02 (
+    session_id Nullable(String),
+    session_start_time Nullable(DateTime),
+    timestamp DateTime,
+    user_id Nullable(String),
+    event_type Nullable(String),
+    data_json Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY timestamp
+
+
+v03
+CREATE TABLE tracking_event_v03 (
+    session_id Nullable(String),
+    session_start_time Nullable(DateTime),
+    timestamp DateTime,
+    user_id Nullable(String),
+    event_type Nullable(String),
+    data_json Nullable(String)
+)
+ENGINE = MergeTree
+ORDER BY timestamp
+
+CREATE TABLE event_add_to_cart (
+    session_id Nullable(String),
+    user_id Nullable(String),
+    event_type String,
+    timestamp DateTime,
+    productName String,
+    productBrand String,
+    productPrice String,
+    quantity String,
+    totalValue String
+) ENGINE = MergeTree
+ORDER BY timestamp
+
+CREATE TABLE event_checkout_attempt (
+    session_id Nullable(String),
+    user_id Nullable(String),
+    event_type String,
+    timestamp DateTime,
+    totalAmount String,
+    itemCount String,
+    totalQuantity String
+) ENGINE = MergeTree
+ORDER BY timestamp
+
+CREATE TABLE IF NOT EXISTS checkout_items
+(
+    session_id String,
+    user_id String,
+    timestamp DateTime,
+    product_name String,
+    product_brand String,
+    product_price String,
+    quantity String
+)
+ENGINE = MergeTree
+ORDER BY timestamp

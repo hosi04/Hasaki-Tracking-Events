@@ -2,7 +2,7 @@ from pathlib import Path
 from clickhouse_connect.driver.exceptions import ClickHouseError
 
 def create_clickhouse_schema(client):
-    SQL_FILE_PATH = Path("/home/ngocthanh/Prime/Intern/Pycharm_project/Tracking_problem/sql/schema_tracking_event")
+    SQL_FILE_PATH = Path("/home/ngocthanh/Prime/intern/tracking-event-project/etl-pipeline/sql/schema_tracking_event")
     DATABASE_NAME = "tracking_problem"
 
     try:

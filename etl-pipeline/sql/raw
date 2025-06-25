@@ -1,0 +1,60 @@
+{
+  "sessionId": "session_1750815532003_sk11nytho",
+  "userId": "user_1750745091147_n5gxgc1q8",
+  "events": [
+      {
+          "eventType": "add_to_cart",
+          "timestamp": "2025-06-25T01:38:57.365Z",
+          "sessionId": "session_1750815532003_sk11nytho",
+          "userId": "user_1750745091147_n5gxgc1q8",
+          "data": {
+              "productName": "Innisfree Green Tea Seed Serum",
+              "productBrand": "Innisfree",
+              "productPrice": 420000,
+              "productEmoji": "🌿",
+              "quantity": 1,
+              "totalValue": 420000,
+              "timeOnPage": 5362
+          }
+      }
+  ],
+  "sessionInfo": {
+      "startTime": 1750815532003,
+      "currentTime": 1750815537365,
+      "timeSpent": 0
+  }
+}
+
+
+Received event: {
+  "sessionId": "session_1750822883616_8wgipfv8x",
+  "userId": "user_1750745091147_n5gxgc1q8",
+  "events": [
+    {
+      "eventType": "checkout_attempt",
+      "timestamp": "2025-06-25T06:20:06.588Z",
+      "sessionId": "session_1750822883616_8wgipfv8x",
+      "userId": "user_1750745091147_n5gxgc1q8",
+      "data": {
+        "cartItems": [
+          {
+            "name": "Maybelline Mascara Lash Sensational",
+            "brand": "Maybelline",
+            "price": 199000,
+            "emoji": "💄",
+            "quantity": 1
+          }
+        ],
+        "totalAmount": "229.000",
+        "itemCount": 1,
+        "totalQuantity": 1,
+        "timeOnPage": 9522971
+      }
+    }
+  ],
+  "sessionInfo": {
+    "startTime": 1750822883617,
+    "currentTime": 1750832406589,
+    "timeSpent": 0
+  }
+}

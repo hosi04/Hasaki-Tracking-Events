@@ -1,5 +1,5 @@
 from pyspark.sql.functions import from_json, col, to_json, to_utc_timestamp, from_unixtime, to_timestamp
-from pyspark.sql.types import StructType, StructField, StringType, LongType, ArrayType, TimestampType
+from pyspark.sql.types import StructType, StructField, StringType, LongType, ArrayType, TimestampType, MapType
 from config.spark_config import SparkConnect
 def main():
 
@@ -34,15 +34,7 @@ def main():
         StructField("events", ArrayType(StructType([
             StructField("eventType", StringType(), True),
             StructField("sessionId", StringType(), True),
-            StructField("data", StructType([
-                StructField("productName", StringType(), True),
-                StructField("productBrand", StringType(), True),
-                StructField("productPrice", LongType(), True),
-                StructField("productEmoji", StringType(), True),
-                StructField("quantity", LongType(), True),
-                StructField("totalValue", LongType(), True),
-                StructField("timeOnPage", LongType(), True),
-            ]), True)
+            StructField("data", MapType(StringType(), StringType()), True)
         ])), True),
         StructField("sessionInfo", StructType([
             StructField("startTime", LongType(), True),
@@ -57,15 +49,11 @@ def main():
     # Step 2: Flatten the parsed struct into the desired output DataFrame
     df_write_database = df_parsed.select(
         col("data.sessionId").alias("session_id"),
+        col("data.userId").alias("user_id"),
+        col("data.events")[0]["eventType"].alias("event_type"),
         from_unixtime(col("data.sessionInfo.startTime") / 1000).alias("session_start_time"),
         from_unixtime(col("data.sessionInfo.currentTime") / 1000).alias("timestamp"),
-        col("data.userId").alias("user_id"),
-        col("data.events")[0]["eventType"].alias("event_type"),  # assumes 1st event
-        col("data.events")[0]["data"]["productName"].alias("product_name"),
-        col("data.events")[0]["data"]["productBrand"].alias("product_brand"),
-        col("data.events")[0]["data"]["productPrice"].alias("price"),
-        col("data.events")[0]["data"]["quantity"].alias("quantity"),
-        col("data.events")[0]["data"]["totalValue"].alias("total_value")
+        to_json(col("data.events")[0]["data"]).alias("data_json")
     )
 
     # # Print out console to test
@@ -82,7 +70,7 @@ def main():
         .foreachBatch(lambda batch_df, batch_id: batch_df.write \
             .format("jdbc") \
             .option("url", "jdbc:clickhouse://localhost:8123/tracking_problem") \
-            .option("dbtable", "tracking_event") \
+            .option("dbtable", "tracking_event_v02") \
             .option("user", "default") \
             .option("password", "") \
             .option("driver", "com.clickhouse.jdbc.ClickHouseDriver") \

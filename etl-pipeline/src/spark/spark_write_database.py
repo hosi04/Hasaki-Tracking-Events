@@ -1,51 +1,114 @@
 from typing import Dict
 from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql.functions import from_json, col, explode
+from pyspark.sql.types import StructType, StructField, StringType, ArrayType
+
 
 class SparkWriteDatabase:
     def __init__(self, spark: SparkSession, spark_config: Dict):
         self.spark = spark
         self.spark_config = spark_config
 
-    def spark_write_clickhouse(self, df: DataFrame, table_name: str, jdbc_url: str, mode: str = "append"):
-        clickhouse_properties = {
-            "user": "default",
-            "password": "",
-            "driver": "com.clickhouse.jdbc.ClickHouseDriver",
-            "batchsize": "100000",
-            "socket_timeout": "300000",
-            "rewriteBatchedStatements": "true",
-            "numPartitions": "8",
-            "jdbcCompliant": "false"
-        }
-
-        try:
-            df.write \
-                .format("jdbc") \
-                .option("url", jdbc_url) \
-                .option("dbtable", table_name) \
-                .option("createTableOptions", "ENGINE = MergeTree() ORDER BY (event_date, event_name)") \
-                .mode(mode) \
-                .options(**clickhouse_properties) \
-                .save()
-            print("------------------------Dữ liệu đã được ghi thành công vào ClickHouse------------------------")
-        except Exception as e:
-            print(f"Lỗi khi ghi vào ClickHouse: {str(e)}")
-
-    def spark_read_database(self, spark: SparkSession, table_name: str, jdbc_url: str):
-        clickhouse_df = spark.read \
+    def write_to_clickhouse_tables(batch_df, batch_id):
+        if batch_df.isEmpty():
+            return
+        # Ghi toàn bộ vào bảng raw
+        batch_df.write \
             .format("jdbc") \
-            .option("url", f"{jdbc_url}") \
-            .option("dbtable", f"(SELECT * FROM {table_name}) as sub_query") \
+            .option("url", "jdbc:clickhouse://localhost:8123/tracking_problem") \
+            .option("dbtable", "tracking_event_v03") \
             .option("user", "default") \
             .option("password", "") \
             .option("driver", "com.clickhouse.jdbc.ClickHouseDriver") \
-            .load()
-        clickhouse_df.show(truncate=False)
+            .mode("append") \
+            .save()
 
-    def spark_write_all_database(self, df: DataFrame, mode: str = "append"):
-        self.spark_write_clickhouse(
-            df,
-            self.spark_config["clickhouse"]["table"],
-            self.spark_config["clickhouse"]["jdbc_url"],
-            mode
-        )
+        # Ghi riêng cho add_to_cart
+        df_add_to_cart = batch_df.filter(col("event_type") == "add_to_cart") \
+            .withColumn("data", from_json("data_json", StructType([
+            StructField("productName", StringType()),
+            StructField("productBrand", StringType()),
+            StructField("productPrice", StringType()),
+            StructField("quantity", StringType()),
+            StructField("totalValue", StringType())
+        ])))
+
+        df_add_to_cart.select(
+            "session_id", "user_id", "event_type", "timestamp",
+            "data.productName", "data.productBrand", "data.productPrice",
+            "data.quantity", "data.totalValue"
+        ).write \
+            .format("jdbc") \
+            .option("url", "jdbc:clickhouse://localhost:8123/tracking_problem") \
+            .option("dbtable", "event_add_to_cart") \
+            .option("user", "default") \
+            .option("password", "") \
+            .option("driver", "com.clickhouse.jdbc.ClickHouseDriver") \
+            .mode("append") \
+            .save()
+
+        # Ghi riêng cho checkout_attempt
+        df_checkout = batch_df.filter(col("event_type") == "checkout_attempt") \
+            .withColumn("data", from_json("data_json", StructType([
+            StructField("cartItems", StringType()),
+            StructField("totalAmount", StringType()),
+            StructField("itemCount", StringType()),
+            StructField("totalQuantity", StringType())
+        ])))
+
+        df_checkout.select(
+            "session_id", "user_id", "event_type", "timestamp",
+            "data.totalAmount", "data.itemCount", "data.totalQuantity"
+        ).write \
+            .format("jdbc") \
+            .option("url", "jdbc:clickhouse://localhost:8123/tracking_problem") \
+            .option("dbtable", "event_checkout_attempt") \
+            .option("user", "default") \
+            .option("password", "") \
+            .option("driver", "com.clickhouse.jdbc.ClickHouseDriver") \
+            .mode("append") \
+            .save()
+
+        # Ghi riêng cho checkout_items
+        df_checkout = batch_df.filter(col("event_type") == "checkout_attempt")
+
+        if not df_checkout.isEmpty():
+            try:
+                # cartItems là JSON string
+                df_checkout_items = df_checkout \
+                    .withColumn("data", from_json("data_json", StructType([
+                    StructField("cartItems", StringType()),
+                    StructField("totalAmount", StringType()),
+                    StructField("itemCount", StringType()),
+                    StructField("totalQuantity", StringType())
+                ]))) \
+                    .withColumn("cart_items_array", from_json("data.cartItems", ArrayType(StructType([
+                    StructField("name", StringType()),
+                    StructField("brand", StringType()),
+                    StructField("price", StringType()),
+                    StructField("quantity", StringType())
+                ])))) \
+                    .where(col("cart_items_array").isNotNull()) \
+                    .withColumn("item", explode(col("cart_items_array"))) \
+                    .select(
+                    col("session_id"),
+                    col("user_id"),
+                    col("timestamp"),
+                    col("item.name").alias("product_name"),
+                    col("item.brand").alias("product_brand"),
+                    col("item.price").alias("product_price"),
+                    col("item.quantity").alias("quantity")
+                )
+
+                df_checkout_items.write \
+                    .format("jdbc") \
+                    .option("url", "jdbc:clickhouse://localhost:8123/tracking_problem") \
+                    .option("dbtable", "checkout_items") \
+                    .option("user", "default") \
+                    .option("password", "") \
+                    .option("driver", "com.clickhouse.jdbc.ClickHouseDriver") \
+                    .mode("append") \
+                    .save()
+
+            except Exception as e:
+                print(f"Error processing checkout_items: {str(e)}")
