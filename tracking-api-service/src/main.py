@@ -23,7 +23,7 @@ async def track_event(request: Request):
     event_data = await request.json()
     print("Received event:", json.dumps(event_data, indent=2, ensure_ascii=False))
 
-    # Send data to Kafka
+    # Send data to Kafka "test-topic"
     try:
         producer.send("test-topic", event_data)
         producer.flush() # Send data

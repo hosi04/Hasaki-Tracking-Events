@@ -1,71 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Real-time Dashboard</title>
+  <title>Real-time Checkout Dashboard</title>
   <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-  <!-- Thêm Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f7f9fc;
+      color: #333;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+      margin-top: 0;
+    }
+
+    #dashboard-container {
+      max-width: 1280px;
+      margin: auto;
+    }
+
+    #revenue-box {
+      font-size: 36px;
+      font-weight: bold;
+      color: #27ae60;
+      background-color: #ecf9f1;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .chart-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .chart-box {
+      flex: 1 1 320px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      min-width: 320px;
+      max-width: 480px;
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 350px;
+      position: relative;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  </style>
 </head>
 <body>
-  <h2>Top sản phẩm được checkout</h2>
-  <ul id="product-list"></ul>
+  <div id="dashboard-container">
+    <h1>Real-time Checkout Dashboard</h1>
 
-  <!-- Thêm canvas cho biểu đồ -->
-  <h2>Biểu đồ số lần checkout theo sản phẩm</h2>
-  <canvas id="checkoutChart" width="400" height="200"></canvas>
+    <div id="revenue-box">Tổng doanh thu: ₫0</div>
+
+    <div class="chart-grid">
+      <div class="chart-box">
+        <h2>Checkout theo sản phẩm</h2>
+        <div class="chart-container">
+          <canvas id="checkoutChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <h2>Doanh thu theo khách hàng</h2>
+        <div class="chart-container">
+          <canvas id="userRevenueChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <h2>Doanh thu theo ngày</h2>
+        <div class="chart-container">
+          <canvas id="dailyRevenueChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     const socket = io();
 
-    // Khởi tạo biểu đồ với Chart.js
-    const ctx = document.getElementById('checkoutChart').getContext('2d');
-    const checkoutChart = new Chart(ctx, {
-      type: 'bar', // Loại biểu đồ: bar (cột), pie (tròn), line (đường), v.v.
-      data: {
-        labels: [], // Tên sản phẩm
-        datasets: [{
-          label: 'Số lần checkout',
-          data: [], // Tổng số lần checkout
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
-        }]
-      },
+    const checkoutChart = new Chart(document.getElementById('checkoutChart'), {
+      type: 'bar',
+      data: { labels: [], datasets: [{ label: 'Số lần checkout', data: [], backgroundColor: 'rgba(52, 152, 219, 0.4)', borderColor: 'rgba(41, 128, 185, 1)', borderWidth: 2 }] },
       options: {
+        responsive: true, maintainAspectRatio: false,
         scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Số lần checkout'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Sản phẩm'
-            }
-          }
+          y: { beginAtZero: true, title: { display: true, text: 'Số lần' } },
+          x: { title: { display: true, text: 'Sản phẩm' } }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => `${ctx.parsed.y} lần` } }
         }
       }
     });
 
-    // Lắng nghe sự kiện update_data
-    socket.on('update_data', function(message) {
-      // Cập nhật danh sách
-      const list = document.getElementById('product-list');
-      list.innerHTML = '';
-      message.data.forEach(([product_name, total]) => {
-        const li = document.createElement('li');
-        li.textContent = `${product_name}: ${total} lần`;
-        list.appendChild(li);
-      });
+    const userRevenueChart = new Chart(document.getElementById('userRevenueChart'), {
+      type: 'bar',
+      data: { labels: [], datasets: [{ label: 'Doanh thu', data: [], backgroundColor: 'rgba(255, 159, 64, 0.4)', borderColor: 'rgba(255, 159, 64, 1)', borderWidth: 2 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: 'VNĐ' } },
+          x: { title: { display: true, text: 'User ID' } }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => '₫' + ctx.parsed.y.toLocaleString('vi-VN') } }
+        }
+      }
+    });
 
-      // Cập nhật dữ liệu cho biểu đồ
-      checkoutChart.data.labels = message.data.map(([product_name]) => product_name);
+    const dailyRevenueChart = new Chart(document.getElementById('dailyRevenueChart'), {
+      type: 'line',
+      data: { labels: [], datasets: [{ label: 'Doanh thu theo ngày', data: [], backgroundColor: 'rgba(46, 204, 113, 0.2)', borderColor: 'rgba(39, 174, 96, 1)', borderWidth: 2, fill: true, tension: 0.3 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          x: { title: { display: true, text: 'Ngày' } },
+          y: { beginAtZero: true, title: { display: true, text: 'VNĐ' } }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => '₫' + ctx.parsed.y.toLocaleString('vi-VN') } }
+        }
+      }
+    });
+
+    socket.on('update_data', function(message) {
+      // Cập nhật biểu đồ checkout
+      checkoutChart.data.labels = message.data.map(([name]) => name);
       checkoutChart.data.datasets[0].data = message.data.map(([, total]) => total);
-      checkoutChart.update(); // Cập nhật biểu đồ
+      checkoutChart.update();
+
+      // Cập nhật doanh thu theo user
+      if (message.user_revenue) {
+        userRevenueChart.data.labels = message.user_revenue.map(([id]) => id);
+        userRevenueChart.data.datasets[0].data = message.user_revenue.map(([, rev]) => rev);
+        userRevenueChart.update();
+      }
+
+      // Cập nhật doanh thu theo ngày
+      if (message.daily_revenue) {
+        dailyRevenueChart.data.labels = message.daily_revenue.map(([day]) => day);
+        dailyRevenueChart.data.datasets[0].data = message.daily_revenue.map(([, rev]) => rev);
+        dailyRevenueChart.update();
+      }
+
+      const total = message.revenue || 0;
+      document.getElementById('revenue-box').textContent = 'Tổng doanh thu: ₫' + total.toLocaleString('vi-VN');
     });
   </script>
 </body>
