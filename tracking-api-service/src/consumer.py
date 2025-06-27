@@ -4,7 +4,7 @@ import io
 from avro.io import DatumReader, BinaryDecoder
 import avro.schema
 import json
-consumer = KafkaConsumer('test-topic',
+consumer = KafkaConsumer('dashboard_update_signal',
                          group_id='my-group',
                          bootstrap_servers=['localhost:9092'])
 def decode(msg_value):

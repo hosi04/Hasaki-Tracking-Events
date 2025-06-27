@@ -146,6 +146,7 @@
       }
     });
 
+    // Listen From Server (emit())
     socket.on('update_data', function(message) {
       // Cập nhật biểu đồ checkout
       checkoutChart.data.labels = message.data.map(([name]) => name);

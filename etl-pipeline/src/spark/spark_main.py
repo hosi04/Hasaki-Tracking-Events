@@ -118,7 +118,7 @@ def write_to_clickhouse_tables(batch_df, batch_id):
         except Exception as e:
             print(f"Error processing checkout_items: {str(e)}")
 
-    # Send Signal To New Topic
+    # Send Signal To New Topic After Write All Table
     send_update_signal()
 
 def main():

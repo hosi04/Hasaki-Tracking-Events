@@ -45,9 +45,9 @@ CREATE TABLE event_add_to_cart (
     timestamp DateTime,
     productName String,
     productBrand String,
-    productPrice String,
-    quantity String,
-    totalValue String
+    productPrice Float64,
+    quantity UInit32,
+    totalValue Float64
 ) ENGINE = MergeTree
 ORDER BY timestamp
 
