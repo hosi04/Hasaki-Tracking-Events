@@ -17,6 +17,14 @@ headers = {
     'Content-Type': 'application/json'
 }
 
+def force_refresh_cube():
+    try:
+        res = requests.post("http://localhost:4000/cubejs-api/v1/run-refresh", headers=headers)
+        print("Gọi ép Cube refresh thành công")
+    except Exception as e:
+        print("Gọi ép refresh thất bại:", e)
+
+
 def fetch_cube(query):
     print("Đang gửi query:", query)
     res = requests.post(CUBE_API_URL, json={"query": query}, headers=headers)  # fix tại đây
@@ -49,6 +57,7 @@ def listen_dashboard_update_signal():
 
 def poll_cube():
     try:
+        force_refresh_cube()
         # Query 1: Tổng doanh thu
         revenue_data = fetch_cube({
             "measures": ["CheckoutItems.totalRevenue"]
@@ -108,6 +117,11 @@ def poll_cube():
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# @socketio.on('connect')
+# def handle_connect():
+#     print("💡 Client vừa kết nối - poll_cube lần đầu")
+#     poll_cube()
 
 if __name__ == '__main__':
     # # Poll Data From CubeDev
