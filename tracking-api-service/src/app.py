@@ -39,7 +39,7 @@ def poll_clickhouse():
             # 3. Tổng doanh thu theo khách hàng
             user_revenue_result = client.query("""
                 SELECT
-                    user_id,
+                    user_id,doc
                     SUM(toUInt32(product_price) * toUInt32(quantity)) AS revenue
                 FROM tracking_problem.checkout_items
                 GROUP BY user_id
@@ -75,8 +75,6 @@ def poll_clickhouse():
 
         except Exception as e:
             print("Lỗi khi truy vấn ClickHouse hoặc gửi dữ liệu:", e)
-
-        time.sleep(3)
 
 @app.route('/')
 def index():

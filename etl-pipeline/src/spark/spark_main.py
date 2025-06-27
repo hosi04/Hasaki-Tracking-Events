@@ -1,8 +1,21 @@
+import json, time
+
+from kafka import KafkaProducer
 from pyspark.sql.functions import from_json, col, to_json, from_unixtime, explode
 from pyspark.sql.types import StructType, StructField, StringType, LongType, ArrayType, MapType
 
 from config.spark_config import SparkConnect
 
+
+# Hàm gửi tín hiệu vào Kafka
+def send_update_signal():
+    producer = KafkaProducer(
+        bootstrap_servers='localhost:9092',
+        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    )
+    message = {"event": "new_data_added", "timestamp": int(time.time())}
+    producer.send('dashboard_update_signal', message)
+    producer.flush()
 
 def write_to_clickhouse_tables(batch_df, batch_id):
     if batch_df.isEmpty():
@@ -66,7 +79,6 @@ def write_to_clickhouse_tables(batch_df, batch_id):
 
     # Ghi riêng cho checkout_items
     df_checkout = batch_df.filter(col("event_type") == "checkout_attempt")
-
     if not df_checkout.isEmpty():
         try:
             # cartItems là JSON string
@@ -104,9 +116,11 @@ def write_to_clickhouse_tables(batch_df, batch_id):
                 .option("driver", "com.clickhouse.jdbc.ClickHouseDriver") \
                 .mode("append") \
                 .save()
-
         except Exception as e:
             print(f"Error processing checkout_items: {str(e)}")
+
+    # Send Signal To New Topic
+    send_update_signal()
 
 def main():
 
