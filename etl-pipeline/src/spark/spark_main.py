@@ -6,7 +6,6 @@ from pyspark.sql.types import StructType, StructField, StringType, LongType, Arr
 
 from config.spark_config import SparkConnect
 
-
 # Hàm gửi tín hiệu vào Kafka
 def send_update_signal():
     producer = KafkaProducer(

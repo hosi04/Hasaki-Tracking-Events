@@ -62,15 +62,18 @@ CREATE TABLE event_checkout_attempt (
 ) ENGINE = MergeTree
 ORDER BY timestamp
 
-CREATE TABLE IF NOT EXISTS checkout_items
+CREATE TABLE checkout_items
 (
     session_id String,
     user_id String,
     timestamp DateTime,
     product_name String,
     product_brand String,
-    product_price String,
-    quantity String
+    product_price Float64,
+    quantity UInt32
 )
 ENGINE = MergeTree
 ORDER BY timestamp
+
+ALTER TABLE checkout_items MODIFY COLUMN product_price Float64
+ALTER TABLE checkout_items MODIFY COLUMN quantity UInt32

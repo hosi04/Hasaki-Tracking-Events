@@ -1,85 +1,95 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-import clickhouse_connect
 import threading
 import time
+import requests
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode='threading')
 
-# Kết nối ClickHouse
-client = clickhouse_connect.get_client(
-    host='localhost',
-    port=8123,
-    user='default',
-    password='',
-    database='tracking_problem'
-)
+CUBE_API_URL = 'http://localhost:4000/cubejs-api/v1/load'
+CUBE_API_TOKEN = 'secret123'
 
-def poll_clickhouse():
+headers = {
+    'Authorization': CUBE_API_TOKEN,
+    'Content-Type': 'application/json'
+}
+
+def fetch_cube(query):
+    print("🔍 Đang gửi query:", query)
+    res = requests.post(CUBE_API_URL, json={"query": query}, headers=headers)  # fix tại đây
+    res.raise_for_status()
+    return res.json().get("data", [])
+
+# Update here
+
+
+def poll_cube():
     while True:
         try:
-            # 1. Top sản phẩm được checkout
-            product_result = client.query("""
-                SELECT
-                    product_name,
-                    sum(toUInt32(quantity)) AS total
-                FROM tracking_problem.checkout_items
-                GROUP BY product_name
-                ORDER BY total DESC
-            """).result_rows
-
-            # 2. Tổng doanh thu toàn hệ thống
-            revenue_result = client.query("""
-                SELECT SUM(toUInt32(product_price) * toUInt32(quantity)) AS total_revenue
-                FROM tracking_problem.checkout_items
-            """).result_rows
-            total_revenue = revenue_result[0][0] if revenue_result else 0
-
-            # 3. Tổng doanh thu theo khách hàng
-            user_revenue_result = client.query("""
-                SELECT
-                    user_id,doc
-                    SUM(toUInt32(product_price) * toUInt32(quantity)) AS revenue
-                FROM tracking_problem.checkout_items
-                GROUP BY user_id
-                ORDER BY revenue DESC
-            """).result_rows
-
-            # Emit về frontend
-            socketio.emit('update_data', {
-                'data': product_result,
-                'revenue': total_revenue,
-                'user_revenue': user_revenue_result
+            # Query 1: Tổng doanh thu
+            revenue_data = fetch_cube({
+                "measures": ["CheckoutItems.totalRevenue"]
             })
-            # 4. Doanh thu theo ngày
-            daily_revenue_result = client.query("""
-                SELECT
-                    toDate(timestamp) AS day,
-                    SUM(toUInt32(product_price) * toUInt32(quantity)) AS revenue
-                FROM tracking_problem.checkout_items
-                GROUP BY day
-                ORDER BY day
-            """).result_rows
+            total_revenue = revenue_data[0]["CheckoutItems.totalRevenue"] if revenue_data else 0
 
-            # Chuyển date -> string để JSON hóa
-            daily_revenue_serializable = [(str(day), revenue) for day, revenue in daily_revenue_result]
+            # Query 2: Top sản phẩm
+            product_data = fetch_cube({
+                "measures": ["CheckoutItems.totalQuantity"],
+                "dimensions": ["CheckoutItems.product_name"],
+                "order": { "CheckoutItems.totalQuantity": "desc" },
+                "limit": 10
+            })
+            products = [
+                (row["CheckoutItems.product_name"], row["CheckoutItems.totalQuantity"])
+                for row in product_data
+            ]
 
-            # Emit toàn bộ
+            # Query 3: Doanh thu theo user
+            user_data = fetch_cube({
+                "measures": ["CheckoutItems.totalRevenue"],
+                "dimensions": ["CheckoutItems.user_id"],
+                "order": { "CheckoutItems.totalRevenue": "desc" },
+                "limit": 10
+            })
+            users = [
+                (row["CheckoutItems.user_id"], row["CheckoutItems.totalRevenue"])
+                for row in user_data
+            ]
+
+            # Query 4: Doanh thu theo ngày
+            daily_data = fetch_cube({
+                "measures": ["CheckoutItems.totalRevenue"],
+                "dimensions": ["CheckoutItems.timestamp"],
+                "timeDimensions": [{
+                    "dimension": "CheckoutItems.timestamp",
+                    "granularity": "day"
+                }],
+                "order": { "CheckoutItems.timestamp": "asc" }
+            })
+            daily = [
+                (row["CheckoutItems.timestamp"], row["CheckoutItems.totalRevenue"])
+                for row in daily_data
+            ]
+
+            # Emit về client
             socketio.emit('update_data', {
-                'data': product_result,
                 'revenue': total_revenue,
-                'user_revenue': user_revenue_result,
-                'daily_revenue': daily_revenue_serializable
+                'data': products,
+                'user_revenue': users,
+                'daily_revenue': daily
             })
 
         except Exception as e:
-            print("Lỗi khi truy vấn ClickHouse hoặc gửi dữ liệu:", e)
+            print("Lỗi khi gọi Cube API:", e)
+        time.sleep(5)
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    threading.Thread(target=poll_clickhouse, daemon=True).start()
+    threading.Thread(target=poll_cube, daemon=True).start()
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
+
+    # Listen topic here
