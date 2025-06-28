@@ -1,11 +1,9 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <title>Real-time Checkout Dashboard</title>
-  <!-- IMPORT SOCKET IO -->
   <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-  <!-- IMPORT LIB CHART.JS -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     body {
@@ -15,13 +13,17 @@
       background-color: #f7f9fc;
       color: #333;
     }
+
     h1, h2 {
       color: #2c3e50;
+      margin-top: 0;
     }
+
     #dashboard-container {
       max-width: 1280px;
       margin: auto;
     }
+
     #revenue-box {
       font-size: 36px;
       font-weight: bold;
@@ -33,12 +35,14 @@
       text-align: center;
       margin-bottom: 30px;
     }
+
     .chart-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
     }
+
     .chart-box {
       flex: 1 1 320px;
       background: white;
@@ -48,11 +52,13 @@
       min-width: 320px;
       max-width: 480px;
     }
+
     .chart-container {
       width: 100%;
       height: 350px;
       position: relative;
     }
+
     canvas {
       width: 100% !important;
       height: 100% !important;
@@ -62,7 +68,9 @@
 <body>
   <div id="dashboard-container">
     <h1>Real-time Checkout Dashboard</h1>
+
     <div id="revenue-box">Tổng doanh thu: ₫0</div>
+
     <div class="chart-grid">
       <div class="chart-box">
         <h2>Checkout theo sản phẩm</h2>
@@ -70,12 +78,14 @@
           <canvas id="checkoutChart"></canvas>
         </div>
       </div>
+
       <div class="chart-box">
         <h2>Doanh thu theo khách hàng</h2>
         <div class="chart-container">
           <canvas id="userRevenueChart"></canvas>
         </div>
       </div>
+
       <div class="chart-box">
         <h2>Doanh thu theo ngày</h2>
         <div class="chart-container">
@@ -97,7 +107,10 @@
           y: { beginAtZero: true, title: { display: true, text: 'Số lần' } },
           x: { title: { display: true, text: 'Sản phẩm' } }
         },
-        plugins: { legend: { display: false } }
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => `${ctx.parsed.y} lần` } }
+        }
       }
     });
 
@@ -110,7 +123,10 @@
           y: { beginAtZero: true, title: { display: true, text: 'VNĐ' } },
           x: { title: { display: true, text: 'User ID' } }
         },
-        plugins: { legend: { display: false } }
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => '₫' + ctx.parsed.y.toLocaleString('vi-VN') } }
+        }
       }
     });
 
@@ -123,74 +139,37 @@
           x: { title: { display: true, text: 'Ngày' } },
           y: { beginAtZero: true, title: { display: true, text: 'VNĐ' } }
         },
-        plugins: { legend: { display: false } }
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => '₫' + ctx.parsed.y.toLocaleString('vi-VN') } }
+        }
       }
     });
 
-    //Goi API De Truyen Tham So (Measures/Dimensions)
-    async function loadChartData(query, callback) {
-      const res = await fetch('/query', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query })
-      });
-      const result = await res.json();
-      if (callback) callback(result.data);
-    }
+    // Listen From Server (emit())
+    socket.on('update_data', function(message) {
+      // Cập nhật biểu đồ checkout
+      checkoutChart.data.labels = message.data.map(([name]) => name);
+      checkoutChart.data.datasets[0].data = message.data.map(([, total]) => total);
+      checkoutChart.update();
 
-    // Lan dau load trang dashboard
-    window.onload = () => {
-      // Tổng doanh thu
-      loadChartData({ measures: ["CheckoutItems.totalRevenue"] }, (data) => {
-        const total = data[0]?.["CheckoutItems.totalRevenue"] || 0;
-        document.getElementById('revenue-box').textContent = 'Tổng doanh thu: ₫' + total.toLocaleString('vi-VN');
-      });
-
-      // Checkout theo sản phẩm
-      loadChartData({
-        measures: ["CheckoutItems.totalQuantity"],
-        dimensions: ["CheckoutItems.product_name"],
-        order: { "CheckoutItems.totalQuantity": "desc" },
-        limit: 10
-      }, (data) => {
-        checkoutChart.data.labels = data.map(row => row["CheckoutItems.product_name"]);
-        checkoutChart.data.datasets[0].data = data.map(row => row["CheckoutItems.totalQuantity"]);
-        checkoutChart.update();
-      });
-
-      // Doanh thu theo khách hàng
-      loadChartData({
-        measures: ["CheckoutItems.totalRevenue"],
-        dimensions: ["CheckoutItems.user_id"],
-        order: { "CheckoutItems.totalRevenue": "desc" },
-        limit: 10
-      }, (data) => {
-        userRevenueChart.data.labels = data.map(row => row["CheckoutItems.user_id"]);
-        userRevenueChart.data.datasets[0].data = data.map(row => row["CheckoutItems.totalRevenue"]);
+      // Cập nhật doanh thu theo user
+      if (message.user_revenue) {
+        userRevenueChart.data.labels = message.user_revenue.map(([id]) => id);
+        userRevenueChart.data.datasets[0].data = message.user_revenue.map(([, rev]) => rev);
         userRevenueChart.update();
-      });
+      }
 
-      // Doanh thu theo ngày
-      loadChartData({
-        measures: ["CheckoutItems.totalRevenue"],
-        dimensions: ["CheckoutItems.timestamp"],
-        timeDimensions: [{
-          dimension: "CheckoutItems.timestamp",
-          granularity: "day"
-        }],
-        order: { "CheckoutItems.timestamp": "asc" }
-      }, (data) => {
-        dailyRevenueChart.data.labels = data.map(row => row["CheckoutItems.timestamp"]);
-        dailyRevenueChart.data.datasets[0].data = data.map(row => row["CheckoutItems.totalRevenue"]);
+      // Cập nhật doanh thu theo ngày
+      if (message.daily_revenue) {
+        dailyRevenueChart.data.labels = message.daily_revenue.map(([day]) => day);
+        dailyRevenueChart.data.datasets[0].data = message.daily_revenue.map(([, rev]) => rev);
         dailyRevenueChart.update();
-      });
-    };
+      }
 
-    // Khi Co Signal => Refresh Dashboard
-    socket.on('dashboard_refresh', () => {
-      console.log("Xac nhan da nhan signal dashboard_refresh");
-      window.onload()
+      const total = message.revenue || 0;
+      document.getElementById('revenue-box').textContent = 'Tổng doanh thu: ₫' + total.toLocaleString('vi-VN');
     });
   </script>
 </body>
-</html>
+</html> -->
