@@ -1,7 +1,7 @@
 cube(`CheckoutItems`, {
   sql: `SELECT * FROM tracking_problem.checkout_items`,
 
-  // 👇 THÊM refreshKey TẠI ĐÂY
+  // THÊM refreshKey TẠI ĐÂY
   refreshKey: {
     sql: `SELECT MAX(timestamp) FROM tracking_problem.checkout_items`
   },
@@ -20,7 +20,7 @@ cube(`CheckoutItems`, {
     totalRevenue: {
       sql: `product_price * quantity`,
       type: `sum`,
-      // 👈 tính tổng doanh thu từ giá * số lượng
+      // tính tổng doanh thu từ giá * số lượng
     },
 
     avgProductPrice: {

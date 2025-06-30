@@ -1,10 +1,5 @@
 cube(`EventAddToCart`, {
   sql: `SELECT * FROM tracking_problem.event_add_to_cart`,
-  
-  // 👇 THÊM refreshKey TẠI ĐÂY
-  refreshKey: {
-    sql: `SELECT MAX(timestamp) FROM tracking_problem.event_add_to_cart`
-  },
 
   measures: {
     count: {
