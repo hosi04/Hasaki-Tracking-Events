@@ -1,9 +1,9 @@
 cube(`CheckoutItems`, {
-  sql: `SELECT * FROM tracking_problem.checkout_items`,
+  sql: `SELECT * FROM tracking_problem_mart.mart_checkout_items`,
 
   // THÊM refreshKey TẠI ĐÂY
   refreshKey: {
-    sql: `SELECT MAX(timestamp) FROM tracking_problem.checkout_items`
+    sql: `SELECT MAX(timestamp) FROM tracking_problem_mart.mart_checkout_items`
   },
 
   measures: {

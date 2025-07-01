@@ -1,0 +1,60 @@
+[0m11:59:15.454190 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x757cf82ef280>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x757cf7386f40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x757cf7386fa0>]}
+
+
+============================== 11:59:15.459620 | 851449ef-9696-4c26-bec6-0abe42650b49 ==============================
+[0m11:59:15.459620 [info ] [MainThread]: Running with dbt=1.10.2
+[0m11:59:15.460038 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/home/ngocthanh/.dbt', 'version_check': 'True', 'warn_error': 'None', 'log_path': 'logs', 'debug': 'False', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'log_format': 'default', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'invocation_command': 'dbt init dbt', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m11:59:31.910437 [debug] [MainThread]: Starter project path: /home/ngocthanh/anaconda3/lib/python3.9/site-packages/dbt/include/starter_project
+[0m11:59:31.913491 [info ] [MainThread]: 
+Your new dbt project "tracking_event_project" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m11:59:31.914242 [info ] [MainThread]: Setting up your profile.
+[0m11:59:39.125629 [info ] [MainThread]: No sample profile found for clickhouse.
+[0m11:59:39.126421 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 23.71255, "process_in_blocks": "0", "process_kernel_time": 0.041928, "process_mem_max_rss": "91124", "process_out_blocks": "80", "process_user_time": 0.799641}
+[0m11:59:39.126874 [debug] [MainThread]: Command `dbt init` succeeded at 11:59:39.126797 after 23.71 seconds
+[0m11:59:39.127274 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x757cf82ef280>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x757cf7313e80>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x757cf7313d90>]}
+[0m11:59:39.127577 [debug] [MainThread]: Flushing usage events
+[0m11:59:40.441776 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m12:00:00.305339 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7853a69ef280>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7853a5a8ff40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7853a5a8ffa0>]}
+
+
+============================== 12:00:00.307946 | 93dfc85f-a8e2-4c3c-a6f5-f56280879c0d ==============================
+[0m12:00:00.307946 [info ] [MainThread]: Running with dbt=1.10.2
+[0m12:00:00.308412 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'profiles_dir': '/home/ngocthanh/.dbt', 'log_path': 'logs', 'version_check': 'True', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'log_format': 'default', 'invocation_command': 'dbt init dbt', 'introspect': 'True', 'static_parser': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'send_anonymous_usage_stats': 'True'}
+[0m12:00:19.158001 [debug] [MainThread]: Starter project path: /home/ngocthanh/anaconda3/lib/python3.9/site-packages/dbt/include/starter_project
+[0m12:00:19.160938 [info ] [MainThread]: 
+Your new dbt project "dbt_tracking_event" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m12:00:19.161466 [info ] [MainThread]: Setting up your profile.
+[0m12:00:20.850679 [info ] [MainThread]: No sample profile found for clickhouse.
+[0m12:00:20.851514 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 20.582129, "process_in_blocks": "0", "process_kernel_time": 0.040045, "process_mem_max_rss": "91164", "process_out_blocks": "80", "process_user_time": 0.766876}
+[0m12:00:20.852057 [debug] [MainThread]: Command `dbt init` succeeded at 12:00:20.851946 after 20.58 seconds
+[0m12:00:20.852661 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7853a69ef280>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7853a5a1ce80>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7853a5a1cd90>]}
+[0m12:00:20.853079 [debug] [MainThread]: Flushing usage events
+[0m12:00:21.986560 [debug] [MainThread]: An error was encountered while trying to flush usage events

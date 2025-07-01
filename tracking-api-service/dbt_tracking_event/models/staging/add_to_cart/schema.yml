@@ -1,0 +1,7 @@
+version: 2
+
+sources:
+  - name: tracking_problem       # chính là schema hoặc database
+    database: tracking_problem   # có thể bỏ dòng này nếu dùng default
+    tables:
+      - name: event_add_to_cart

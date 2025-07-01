@@ -1,0 +1,106 @@
+[2025-06-30T09:43:46.894+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-06-30T09:43:46.918+0000] {taskinstance.py:2073} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: dbt_run_checkout_pipeline.auto_run_dbt manual__2025-06-30T09:09:08.680355+00:00 [queued]>
+[2025-06-30T09:43:47.030+0000] {taskinstance.py:2073} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: dbt_run_checkout_pipeline.auto_run_dbt manual__2025-06-30T09:09:08.680355+00:00 [queued]>
+[2025-06-30T09:43:47.030+0000] {taskinstance.py:2303} INFO - Starting attempt 1 of 3
+[2025-06-30T09:43:47.048+0000] {taskinstance.py:2327} INFO - Executing <Task(BashOperator): auto_run_dbt> on 2025-06-30 09:09:08.680355+00:00
+[2025-06-30T09:43:47.052+0000] {standard_task_runner.py:63} INFO - Started process 613 to run task
+[2025-06-30T09:43:47.055+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'dbt_run_checkout_pipeline', 'auto_run_dbt', 'manual__2025-06-30T09:09:08.680355+00:00', '--job-id', '38', '--raw', '--subdir', 'DAGS_FOLDER/automatic_run_dbt.py', '--cfg-path', '/tmp/tmptpd9zw82']
+[2025-06-30T09:43:47.056+0000] {standard_task_runner.py:91} INFO - Job 38: Subtask auto_run_dbt
+[2025-06-30T09:43:47.064+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.11/site-packages/***/settings.py:195 DeprecationWarning: The sql_alchemy_conn option in [core] has been moved to the sql_alchemy_conn option in [database] - the old setting has been used, but please update your config.
+[2025-06-30T09:43:47.085+0000] {task_command.py:426} INFO - Running <TaskInstance: dbt_run_checkout_pipeline.auto_run_dbt manual__2025-06-30T09:09:08.680355+00:00 [running]> on host 8f966ca0121e
+[2025-06-30T09:43:47.155+0000] {taskinstance.py:2644} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='hosi04' AIRFLOW_CTX_DAG_ID='dbt_run_checkout_pipeline' AIRFLOW_CTX_TASK_ID='auto_run_dbt' AIRFLOW_CTX_EXECUTION_DATE='2025-06-30T09:09:08.680355+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-06-30T09:09:08.680355+00:00'
+[2025-06-30T09:43:47.156+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-06-30T09:43:47.166+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2025-06-30T09:43:47.166+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', 'cd /opt/***/dbt && dbt run --profiles-dir /opt/***/.dbt/']
+[2025-06-30T09:43:47.176+0000] {subprocess.py:86} INFO - Output:
+[2025-06-30T09:43:48.683+0000] {subprocess.py:93} INFO - [0m09:43:48  Running with dbt=1.10.2
+[2025-06-30T09:43:48.855+0000] {subprocess.py:93} INFO - [0m09:43:48  Registered adapter: clickhouse=1.9.2
+[2025-06-30T09:43:49.405+0000] {subprocess.py:93} INFO - [0m09:43:49  Found 4 models, 2 sources, 476 macros
+[2025-06-30T09:43:49.407+0000] {subprocess.py:93} INFO - [0m09:43:49
+[2025-06-30T09:43:49.407+0000] {subprocess.py:93} INFO - [0m09:43:49  Concurrency: 1 threads (target='dev')
+[2025-06-30T09:43:49.407+0000] {subprocess.py:93} INFO - [0m09:43:49
+[2025-06-30T09:43:49.880+0000] {subprocess.py:93} INFO - [0m09:43:49  1 of 4 START sql table model `tracking_problem_stg`.`stg_add_to_cart` .......... [RUN]
+[2025-06-30T09:43:49.951+0000] {subprocess.py:93} INFO - [0m09:43:49  1 of 4 OK created sql table model `tracking_problem_stg`.`stg_add_to_cart` ..... [[32mOK[0m in 0.07s]
+[2025-06-30T09:43:49.952+0000] {subprocess.py:93} INFO - [0m09:43:49  2 of 4 START sql table model `tracking_problem_stg`.`stg_checkout_items` ....... [RUN]
+[2025-06-30T09:43:49.970+0000] {subprocess.py:93} INFO - [0m09:43:49  2 of 4 OK created sql table model `tracking_problem_stg`.`stg_checkout_items` .. [[32mOK[0m in 0.02s]
+[2025-06-30T09:43:49.972+0000] {subprocess.py:93} INFO - [0m09:43:49  3 of 4 START sql table model `tracking_problem_int`.`int_checkout_items` ....... [RUN]
+[2025-06-30T09:43:49.999+0000] {subprocess.py:93} INFO - [0m09:43:49  3 of 4 OK created sql table model `tracking_problem_int`.`int_checkout_items` .. [[32mOK[0m in 0.03s]
+[2025-06-30T09:43:50.001+0000] {subprocess.py:93} INFO - [0m09:43:50  4 of 4 START sql table model `tracking_problem_mart`.`mart_checkout_items` ..... [RUN]
+[2025-06-30T09:43:50.035+0000] {subprocess.py:93} INFO - [0m09:43:50  4 of 4 ERROR creating sql table model `tracking_problem_mart`.`mart_checkout_items`  [[31mERROR[0m in 0.03s]
+[2025-06-30T09:43:50.039+0000] {subprocess.py:93} INFO - [0m09:43:50
+[2025-06-30T09:43:50.039+0000] {subprocess.py:93} INFO - [0m09:43:50  Finished running 4 table models in 0 hours 0 minutes and 0.63 seconds (0.63s).
+[2025-06-30T09:43:50.060+0000] {subprocess.py:93} INFO - [0m09:43:50
+[2025-06-30T09:43:50.061+0000] {subprocess.py:93} INFO - [0m09:43:50  [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[2025-06-30T09:43:50.061+0000] {subprocess.py:93} INFO - [0m09:43:50
+[2025-06-30T09:43:50.061+0000] {subprocess.py:93} INFO - [0m09:43:50  [31mFailure in model mart_checkout_items (models/mart/checkout/mart_checkout_items.sql)[0m
+[2025-06-30T09:43:50.061+0000] {subprocess.py:93} INFO - [0m09:43:50    Database Error in model mart_checkout_items (models/mart/checkout/mart_checkout_items.sql)
+[2025-06-30T09:43:50.061+0000] {subprocess.py:93} INFO -   HTTPDriver for http://clickhouse:8123 received ClickHouse error code 47
+[2025-06-30T09:43:50.061+0000] {subprocess.py:93} INFO -    Code: 47, e.displayText() = DB::Exception: Missing columns: 'checkout_date' while processing query: 'SELECT user_id, session_id, timestamp, product_name, product_brand, count() AS total_items, sum(quantity) AS total_quantity, sum(total_value) AS total_revenue, sum(multiIf(is_high_value_item, 1, 0)) AS high_value_item_count FROM items GROUP BY user_id, session_id, checkout_date, product_name, product_brand', required columns: 'product_name' 'is_high_value_item' 'session_id' 'timestamp' 'user_id' 'product_brand' 'checkout_date' 'quantity' 'total_value' 'product_name' 'is_high_value_item' 'session_id' 'timestamp' 'user_id' 'product_brand' 'checkout_date' 'quantity' 'total_value' (version 21.8.14.5 (official build))
+[2025-06-30T09:43:50.062+0000] {subprocess.py:93} INFO -   compiled code at target/run/dbt_tracking_event/models/mart/checkout/mart_checkout_items.sql
+[2025-06-30T09:43:50.062+0000] {subprocess.py:93} INFO - [0m09:43:50
+[2025-06-30T09:43:50.062+0000] {subprocess.py:93} INFO - [0m09:43:50    compiled code at target/compiled/dbt_tracking_event/models/mart/checkout/mart_checkout_items.sql
+[2025-06-30T09:43:50.062+0000] {subprocess.py:93} INFO - [0m09:43:50
+[2025-06-30T09:43:50.062+0000] {subprocess.py:93} INFO - [0m09:43:50  Done. PASS=3 WARN=0 ERROR=1 SKIP=0 NO-OP=0 TOTAL=4
+[2025-06-30T09:43:52.001+0000] {subprocess.py:93} INFO - Traceback (most recent call last):
+[2025-06-30T09:43:52.001+0000] {subprocess.py:93} INFO -   File "/home/***/.local/bin/dbt", line 8, in <module>
+[2025-06-30T09:43:52.001+0000] {subprocess.py:93} INFO -     sys.exit(cli())
+[2025-06-30T09:43:52.001+0000] {subprocess.py:93} INFO -              ^^^^^
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/click/core.py", line 1157, in __call__
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -     return self.main(*args, **kwargs)
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/click/core.py", line 1078, in main
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -     rv = self.invoke(ctx)
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -          ^^^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/click/core.py", line 1688, in invoke
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -     return _process_result(sub_ctx.command.invoke(sub_ctx))
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/click/core.py", line 1434, in invoke
+[2025-06-30T09:43:52.002+0000] {subprocess.py:93} INFO -     return ctx.invoke(self.callback, **ctx.params)
+[2025-06-30T09:43:52.003+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.003+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/click/core.py", line 783, in invoke
+[2025-06-30T09:43:52.003+0000] {subprocess.py:93} INFO -     return __callback(*args, **kwargs)
+[2025-06-30T09:43:52.003+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.003+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/click/decorators.py", line 33, in new_func
+[2025-06-30T09:43:52.003+0000] {subprocess.py:93} INFO -     return f(get_current_context(), *args, **kwargs)
+[2025-06-30T09:43:52.003+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.004+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/dbt/cli/main.py", line 149, in wrapper
+[2025-06-30T09:43:52.004+0000] {subprocess.py:93} INFO -     return func(*args, **kwargs)
+[2025-06-30T09:43:52.004+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.004+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/dbt/cli/requires.py", line 190, in wrapper
+[2025-06-30T09:43:52.004+0000] {subprocess.py:93} INFO -     fire_event(
+[2025-06-30T09:43:52.004+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/dbt_common/events/functions.py", line 142, in fire_event
+[2025-06-30T09:43:52.004+0000] {subprocess.py:93} INFO -     get_event_manager().fire_event(
+[2025-06-30T09:43:52.004+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/dbt_common/events/event_manager.py", line 56, in fire_event
+[2025-06-30T09:43:52.004+0000] {subprocess.py:93} INFO -     msg = msg_from_base_event(e, level=level)
+[2025-06-30T09:43:52.005+0000] {subprocess.py:93} INFO -           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.005+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/dbt_common/events/base_types.py", line 140, in msg_from_base_event
+[2025-06-30T09:43:52.005+0000] {subprocess.py:93} INFO -     "msg": event.message(),
+[2025-06-30T09:43:52.005+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.005+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/dbt/events/types.py", line 2400, in message
+[2025-06-30T09:43:52.005+0000] {subprocess.py:93} INFO -     return f"Resource report: {self.to_json()}"
+[2025-06-30T09:43:52.005+0000] {subprocess.py:93} INFO -                                ^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.005+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.11/site-packages/dbt_common/events/base_types.py", line 98, in to_json
+[2025-06-30T09:43:52.005+0000] {subprocess.py:93} INFO -     return MessageToJson(
+[2025-06-30T09:43:52.006+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^
+[2025-06-30T09:43:52.006+0000] {subprocess.py:93} INFO - TypeError: MessageToJson() got an unexpected keyword argument 'always_print_fields_with_no_presence'
+[2025-06-30T09:43:52.493+0000] {subprocess.py:97} INFO - Command exited with return code 1
+[2025-06-30T09:43:52.493+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-06-30T09:43:52.504+0000] {taskinstance.py:2890} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/models/baseoperator.py", line 400, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/operators/bash.py", line 243, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2025-06-30T09:43:52.506+0000] {taskinstance.py:1205} INFO - Marking task as UP_FOR_RETRY. dag_id=dbt_run_checkout_pipeline, task_id=auto_run_dbt, execution_date=20250630T090908, start_date=20250630T094346, end_date=20250630T094352
+[2025-06-30T09:43:52.521+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 38 for task auto_run_dbt (Bash command failed. The command returned a non-zero exit code 1.; 613)
+[2025-06-30T09:43:52.545+0000] {local_task_job_runner.py:240} INFO - Task exited with return code 1
+[2025-06-30T09:43:52.555+0000] {taskinstance.py:3482} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-06-30T09:43:52.555+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
